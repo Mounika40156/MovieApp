@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import MovieTrailer from './MovieTrailer';
 
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
-  const [videoId, setVideoId] = useState(null);
   const [currentEmoji, setCurrentEmoji] = useState(0);
   const emojis = ['😆', '😌', '😲', '☹️', '😠', '🥺', '🙂‍↔️', '🙂‍↕️', '☠️', '👻', '🙈', '😂', '😘', '😁', '😊', '🤗', '😏', '😭', '🥵', '🫨'];
   const navigate = useNavigate();
+
+  const trailers = {
+    tt11011104: 'zHiKFSBO_JE', 
+    tt16539454: 'JE76wAz9U8w',
+    tt27957740: 'V0ARlFc_ndE',
+    tt27540542: 'krdomVobIxE',
+    tt0107362: 'h4JTnLmcEEo',
+    tt20850406: 'Ljk6tGZ1l3A',
+    tt0258490: 'KFHXCvvxL1U'
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,7 +37,6 @@ const MovieDetails = () => {
         if (data.Response !== 'False') {
           setMovie(data);
           fetchRecommendations();
-          fetchMovieTrailer(data.Title);
         } else {
           console.error('Movie not found');
         }
@@ -52,26 +59,17 @@ const MovieDetails = () => {
       }
     };
 
-    const fetchMovieTrailer = async (movieTitle) => {
-      try {
-        const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${movieTitle}+trailer&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`);
-        const data = await response.json();
-
-        if (data.items && data.items.length > 0) {
-          const videoId = data.items[0].id.videoId;
-          setVideoId(videoId);
-        } else {
-          console.error("Trailer not found");
-          setVideoId(null);
-        }
-      } catch (error) {
-        console.error("Error fetching trailer:", error);
-        setVideoId(null);
-      }
-    };
-
     fetchMovieDetails();
   }, [id]);
+
+  const handleWatchNow = (movieId) => {
+    const videoId = trailers[movieId];
+    if(videoId){
+      navigate(`/movie/trailer/${videoId}`); 
+    }else{
+      console.error('Trailer not available for this movie');
+    }
+  };
 
   if (loading) {
     return <div className="text-center py-10">Loading Movie Details...</div>;
@@ -86,7 +84,7 @@ const MovieDetails = () => {
       <div className="flex flex-row relative">
         <h1 className="text-red-600 font-extrabold text-3xl absolute top-7 left-[100px]">Movies</h1>
         <p className="text-white font-extrabold text-2xl mt-[20px] fonts-m animate-bounce">
-          <span className="text-4xl  mt-[60px] ml-[200px]">{emojis[currentEmoji]}</span>
+          <span className="text-4xl mt-[60px] ml-[200px]">{emojis[currentEmoji]}</span>
         </p>
       </div>
       <div className="movie-details-container bg-black px-10 mt-[50px] ml-[40px] flex gap-16">
@@ -115,7 +113,7 @@ const MovieDetails = () => {
               <p className=" mb-4"><strong>Actors:</strong> {movie.Actors}</p>
 
               <button
-                onClick={() => navigate(`/trailer/${videoId}`)}
+                onClick={() => handleWatchNow(movie.imdbID)}
                 className="bg-red-600 text-white px-6 py-2 rounded-md absolute hover:bg-red-800 mt-[30px]"
               >
                 Watch Now

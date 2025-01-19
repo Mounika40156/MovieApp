@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useFavorites } from './FavoritesContext'; // Create this context
+import { useFavorites } from './FavoritesContext'; 
 
 const FavoritesList = () => {
-  const { favoriteMovies, removeFavorite } = useFavorites(); // Access favorite movies
+  const { favoriteMovies, removeFavorite } = useFavorites(); 
   const [filteredMovies, setFilteredMovies] = useState(favoriteMovies);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

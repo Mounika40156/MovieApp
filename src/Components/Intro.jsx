@@ -25,11 +25,11 @@ const Intro = () => {
   if (hideIntro) return null;
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black flex items-center justify-center">
+    <div className="absolute top-0 left-0 w-full h-full bg-black flex items-center justify-center">
       <h1
         className={`text-5xl md:text-[100px] text-red-600 font-extrabold ${
           animate ? "animate-ping" : ""
-        } mt-[50px]`}
+        } mt-[10px]`}
       >
         MOVIE APP
       </h1>

@@ -57,7 +57,6 @@ const Display = ({ searchQuery = '' }) => {
     fetchMovies();
   }, []);
 
-  // Filter movies based on search query
   const filteredMovies = movies.filter(movie =>
     movie.Title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -72,30 +71,29 @@ const Display = ({ searchQuery = '' }) => {
 
   const showToast = (message) => {
     setToastMessage(message);
-    setTimeout(() => setToastMessage(''), 3000); // Hide toast after 3 seconds
+    setTimeout(() => setToastMessage(''), 3000); 
   };
 
   const handleSaveMovie = (movie) => {
     if (savedMovies.some(m => m.imdbID === movie.imdbID)) {
-      removeMovie(movie.imdbID); // Remove from saved list
+      removeMovie(movie.imdbID); 
       showToast(`Removed "${movie.Title}" from Saved List`);
     } else {
-      addMovie(movie); // Add to saved list
+      addMovie(movie); 
       showToast(`Added "${movie.Title}" to Saved List`);
     }
   };
 
   const handleFavoriteMovie = (movie) => {
     if (favorites.some(fav => fav.imdbID === movie.imdbID)) {
-      removeFavorite(movie.imdbID); // Remove from favorites
+      removeFavorite(movie.imdbID); 
       showToast(`Removed "${movie.Title}" from Favorites`);
     } else {
-      addFavorite(movie); // Add to favorites
+      addFavorite(movie); 
       showToast(`Added "${movie.Title}" to Favorites`);
     }
   };
 
-  // Pagination logic
   const indexOfLastMovie = currentPage * 30;
   const currentMovies = filteredMovies.slice(0, indexOfLastMovie);
 
@@ -105,7 +103,6 @@ const Display = ({ searchQuery = '' }) => {
 
   return (
     <div className="bg-black mt-[140px]">
-      {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed top-5 right-5 bg-red-600 text-white px-4 py-2 rounded-md shadow-md z-50">
           {toastMessage}
